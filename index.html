@@ -13,7 +13,7 @@
   if (!id) {
     document.getElementById('msg').textContent = '영상 주소가 없습니다.';
   } else {
-    var target = 'https://drive.google.com/file/d/' + id + '/view';
+   var target = 'https://drive.google.com/file/d/' + id + '/preview';
     var link = document.getElementById('link');
     link.href = target;
     link.style.display = 'inline-block';
