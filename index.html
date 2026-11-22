@@ -6,27 +6,37 @@
 <title>일산동부회중 집회 영상</title>
 <meta property="og:title" content="일산동부회중 집회 영상">
 <meta property="og:description" content="눌러서 영상 보기">
+<style>
+  body { margin:0; font-family:sans-serif; background:#000; color:#fff; text-align:center; }
+  #player { width:100%; height:100vh; border:0; display:none; }
+  #box { padding:40px 20px; }
+  #link { display:none; font-size:20px; padding:14px 24px; background:#1a73e8; color:#fff; border-radius:8px; text-decoration:none; }
+</style>
 </head>
-<body style="font-family:sans-serif;text-align:center;padding:40px 20px">
-<p id="msg">영상으로 이동 중입니다...</p>
-<a id="link" href="#" style="display:none;font-size:20px;padding:14px 24px;background:#1a73e8;color:#fff;border-radius:8px;text-decoration:none">▶ 눌러서 영상 보기</a>
+<body>
+<div id="box">
+  <p id="msg">영상으로 이동 중입니다...</p>
+  <a id="link" href="#">▶ 눌러서 영상 보기</a>
+</div>
+<iframe id="player" allow="autoplay; fullscreen" allowfullscreen></iframe>
 <script>
   var id = new URLSearchParams(location.search).get('v');
   if (!id) {
     document.getElementById('msg').textContent = '영상 주소가 없습니다.';
-  } else {
-    var target = 'https://drive.google.com/file/d/' + id + '/preview';
+  } else if (/KAKAOTALK/i.test(navigator.userAgent)) {
+    // 카톡: 이 페이지 자체를 외부 브라우저로 넘김
+    var ext = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
     var link = document.getElementById('link');
+    link.href = ext;
     link.style.display = 'inline-block';
-    if (/KAKAOTALK/i.test(navigator.userAgent)) {
-      var ext = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(target);
-      link.href = ext;
-      document.getElementById('msg').textContent = '아래 버튼을 눌러주세요';
-      location.href = ext;
-    } else {
-      link.href = target;
-      location.replace(target);
-    }
+    document.getElementById('msg').textContent = '자동으로 안 넘어가면 아래 버튼을 눌러주세요';
+    location.href = ext;
+  } else {
+    // 일반 브라우저: 페이지 안에서 바로 재생
+    document.getElementById('box').style.display = 'none';
+    var player = document.getElementById('player');
+    player.src = 'https://drive.google.com/file/d/' + id + '/preview';
+    player.style.display = 'block';
   }
 </script>
 </body>
