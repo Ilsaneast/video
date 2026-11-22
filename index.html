@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>집회 영상</title>
+</head>
+<body style="font-family:sans-serif;text-align:center;padding:40px 20px">
+<p id="msg">영상으로 이동 중입니다...</p>
+<a id="link" href="#" style="display:none;font-size:18px">여기를 눌러 영상 보기</a>
+<script>
+  var id = new URLSearchParams(location.search).get('v');
+  if (!id) {
+    document.getElementById('msg').textContent = '영상 주소가 없습니다.';
+  } else {
+    var target = 'https://drive.google.com/file/d/' + id + '/view';
+    var link = document.getElementById('link');
+    link.href = target;
+    link.style.display = 'inline-block';
+    if (/KAKAOTALK/i.test(navigator.userAgent)) {
+      // 카톡에서 열면 외부 브라우저로 넘김
+      location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(target);
+    } else {
+      // 다른 브라우저면 바로 드라이브로 이동
+      location.replace(target);
+    }
+  }
+</script>
+</body>
+</html>
